@@ -1,0 +1,11 @@
+﻿Build started 30/07/2015 19:45:45.
+     1>Project "D:\Programming\FunctionalCpp\fCpp\FunctionalCppTests\FunctionalCppTests.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\include" /ID:\Programming\FunctionalCpp\fCpp\\fCpp /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\FunctionalCppTests.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /FC /errorReport:prompt unittest1.cpp
+         unittest1.cpp
+     1>d:\programming\functionalcpp\fcpp\fcpp\functionalcpp.hpp(19): error C2270: 'map' : modifiers not allowed on nonmember functions
+     1>Done Building Project "D:\Programming\FunctionalCpp\fCpp\FunctionalCppTests\FunctionalCppTests.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.15

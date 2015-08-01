@@ -55,5 +55,41 @@ namespace FunctionalCppTests
 				Assert::AreEqual(newInts[i], expectedInts[i]);
 			}
 		}
+
+		//Gets a pure context where all functions are pure and nothing is mutable within
+		TEST_METHOD(PureContextHappyPath)
+		{
+			auto fpContext = Functional::GetContext();
+
+			val<int> expected = 1 + 1;
+			val<int> result = fpContext->pure<int>([](){
+				Func<val<int>(val<int>, val<int>)> myAdd = [](val<int> x, val<int> y) { return x + y;  };
+
+				return myAdd(1, 1);
+			});
+
+			Assert::AreEqual(expected, result);
+		}
+
+		//there's no such thing as a truly immutable type in C++
+		TEST_METHOD(ToHellWithYourConst)
+		{
+			auto fpContext = Functional::GetContext();
+
+			val<int> expected = 1 + 1;
+			val<int> result = fpContext->pure<int>([](){
+				Func<val<int>(val<int>, val<int>)> myAdd = [](val<int> x, val<int> y) { return x + y;  };
+
+				return myAdd(1, 1);
+			});
+
+			//turns the cosnt int (val<int>) into a non-const int and grabs the address of the result variable in memory
+			int * ptrToResults = &(int)result;
+			//modifies the value stored at the address of the const int variable
+			*ptrToResults = 3;
+			//result is now 3
+
+			Assert::AreNotEqual(expected, result);
+		}
 	};
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <algorithm>
+#include <memory>
+#include <vector>
 
 namespace FunctionalCPP {
 	template<typename T>
@@ -11,6 +13,14 @@ namespace FunctionalCPP {
 
 	class Functional {
 	public :
+		static std::shared_ptr<Functional> GetContext() {
+			if (_pureContext == nullptr) {
+				_pureContext = std::make_shared<Functional>();
+			}
+
+			return _pureContext;
+		}
+
 		Functional() {};
 
 		template<typename T>
@@ -22,7 +32,17 @@ namespace FunctionalCPP {
 			}
 
 			return copy;
-		};
+		}
+
+		template<typename T>
+		const T pure(Func<const T()> const local) const {
+			return local();
+		}
+
+	private:
+		static std::shared_ptr<Functional> _pureContext;
 	};
+
+	std::shared_ptr<Functional> Functional::_pureContext = 0;
 
 }

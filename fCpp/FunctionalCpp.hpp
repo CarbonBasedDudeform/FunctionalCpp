@@ -27,8 +27,9 @@ namespace FunctionalCPP {
 		const std::vector<T> map(const std::vector<T> collection, const Func<T(T)> op) const {
 			std::vector<T> copy;
 
-			for (auto iter = collection.begin(); iter != collection.end(); iter++) {
-				copy.push_back(op((*iter)));
+			for (T iter : collection)
+			{
+				copy.push_back( op(iter) );
 			}
 
 			return copy;

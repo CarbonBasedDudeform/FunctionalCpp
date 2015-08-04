@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include <vector>
 
 #include <FunctionalCpp.hpp>
 
@@ -44,15 +43,15 @@ namespace FunctionalCppTests
 		//maps a function onto a set of values
 		TEST_METHOD(MapValueOnToCollection)
 		{
-			std::vector<val<int>> myInts{ 1, 2, 3, 4, 5 };
+			List<val<int>> myInts{ 1, 2, 3, 4, 5 };
 			Functional F;
 			auto newInts = F.map<val<int>>(myInts, [](val<int> x){ return x*x; });
 
-			std::vector<int> expectedInts{ 1, 4, 9, 16, 25 };
+			List<int> expectedInts{ 1, 4, 9, 16, 25 };
 
-			for (unsigned int i = 0; i < myInts.size(); ++i)
+			for (int index = 0; index < 5; index++)
 			{
-				Assert::AreEqual(newInts[i], expectedInts[i]);
+				Assert::AreEqual( newInts.get(index), expectedInts.get(index) );
 			}
 		}
 
@@ -62,7 +61,7 @@ namespace FunctionalCppTests
 			auto fpContext = Functional::GetContext();
 
 			val<int> expected = 1 + 1;
-			val<int> result = fpContext->pure<int>([](){
+			val<int> result = fpContext->pure<int>([]() {
 				Func<val<int>(val<int>, val<int>)> myAdd = [](val<int> x, val<int> y) { return x + y;  };
 
 				return myAdd(1, 1);
@@ -77,7 +76,7 @@ namespace FunctionalCppTests
 			auto fpContext = Functional::GetContext();
 
 			val<int> expected = 1 + 1;
-			val<int> result = fpContext->pure<int>([](){
+			val<int> result = fpContext->pure<int>([]() {
 				Func<val<int>(val<int>, val<int>)> myAdd = [](val<int> x, val<int> y) { return x + y;  };
 
 				return myAdd(1, 1);
@@ -90,6 +89,54 @@ namespace FunctionalCppTests
 			//result is now 3
 
 			Assert::AreNotEqual(expected, result);
+		}
+
+		TEST_METHOD(FilterSequentualList1to10into1to5)
+		{
+			auto fpContext = Functional::GetContext();
+
+			Assert::Fail();
+		}
+
+		//vs2015 no longer allows collections of type const, so testing hand-rolled const linked list
+		TEST_METHOD(InsertElementAtEndOfList)
+		{
+			List<int> myList;
+
+			myList.insert(5);
+
+			val<int> expected = 5;
+			val<int> result = myList.get(0);
+			Assert::AreEqual(expected, result);
+		}
+
+		//Retrieve the size of a list
+		TEST_METHOD(GetSizeOfList)
+		{
+			List<int> myList;
+
+			myList.insert(5);
+			val<int> expected = 1;
+			val<int> result = myList.size();
+
+			Assert::AreEqual(expected, result);
+		}
+
+		//create a copy of a list
+		TEST_METHOD(ListCopyAssignment)
+		{
+			List<val<int>> myInts{ 1, 2, 3, 4, 5 };
+			auto newInts = myInts;
+
+			for (int index = 0; index < 5; index++)
+			{
+				Assert::AreEqual( newInts.get(index), myInts.get(index) );
+			}
+		}
+		//ForEach over a List
+		TEST_METHOD(ForEachOverList)
+		{
+			Assert::Fail();
 		}
 	};
 }

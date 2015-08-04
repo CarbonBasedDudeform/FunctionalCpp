@@ -10,6 +10,7 @@ using namespace FunctionalCPP;
 int main()
 {
 	cout << "Demo App for functional C++" << endl;
+	/*
 	val<int> two = Functional::GetContext()->pure<val<int>>([](){
 		return 1 + 1;
 	});
@@ -29,6 +30,8 @@ int main()
 	//ignores the constness of types when outputting.
 	cout << typeid(res).name() << endl;
 
+	List<float> myFloats = { 1.0f, 2.0f, 3.0f };
+	*/
 	cin.get();
 	return 0;
 }

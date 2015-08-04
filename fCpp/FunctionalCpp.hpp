@@ -2,11 +2,93 @@
 #include <functional>
 #include <algorithm>
 #include <memory>
-#include <vector>
+#include <exception>
 
 namespace FunctionalCPP {
 	template<typename T>
 	using val = const T;
+
+	template<typename T>
+	class ListNode {
+	public:
+		ListNode(T value) : _value(value), Next(nullptr) {};
+		~ListNode() {};
+		ListNode * Next;
+		const T get() { return _value; }
+	private:
+		T _value;
+	};
+
+	template<class T>
+	class List {
+	public:
+		List() : _head(nullptr), _tail(nullptr), _size(0) {};
+		List(List & copy) : _head(nullptr), _tail(nullptr), _size(0) {
+			auto size = copy.size();
+			for (size_t i = 0; i < size; ++i)
+			{
+				insert(copy.get(i));
+			}
+		};
+
+		List(std::initializer_list<val<T>> init_list) : _head(nullptr), _tail(nullptr), _size(0) {
+			for (auto item : init_list)
+			{
+				insert(item);
+			}
+		}
+
+		~List() {
+			ListNode<val<T>> * cur = _head;
+			
+			bool ElementsExist = cur != nullptr;
+			while ( ElementsExist )
+			{
+				auto NextElement = cur->Next;
+				delete cur;
+				cur = NextElement;
+
+				ElementsExist = cur != nullptr;
+			}
+		};
+
+
+		const bool insert(val<T> obj) {
+			ListNode<val<T>> * temp = new ListNode<val<T>>(obj);
+
+			const bool IsFirstElementInList = _head == nullptr;
+			if (IsFirstElementInList) {
+				_head = temp;
+				_tail = temp;
+			}
+			else {
+				_tail->Next = temp;
+				_tail = temp;
+			}
+
+			++_size;
+			return true;
+		}
+
+		const val<T> get(const size_t index) const {
+			ListNode<val<T>> * elem = _head;
+			for (size_t i = 0; i < index; ++i)
+			{
+				elem = elem->Next;
+			}
+
+			return elem->get();
+		}
+
+		const size_t size() const {
+			return _size;
+		}
+
+	private:
+		ListNode<val<T>> * _head;
+		ListNode<val<T>> * _tail;
+		size_t _size;
+	};
 
 	template<typename T>
 	using Func = std::function < T > ;
@@ -24,12 +106,13 @@ namespace FunctionalCPP {
 		Functional() {};
 
 		template<typename T>
-		const std::vector<T> map(const std::vector<T> collection, const Func<T(T)> op) const {
-			std::vector<T> copy;
+		List<T> map(const List<T> collection, const Func<T(T)> op) const {
+			List<T> copy;
 
-			for (T iter : collection)
+			const size_t size = collection.size();
+			for (size_t i = 0; i < size; ++i)
 			{
-				copy.push_back( op(iter) );
+				copy.insert(op(collection.get(i)));
 			}
 
 			return copy;

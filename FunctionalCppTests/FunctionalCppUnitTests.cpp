@@ -19,6 +19,11 @@ namespace FunctionalCppTests
 		static val<int> add(val<int> x, val<int> y) {
 			return x + y;
 		}
+
+		static val<int> multiply(val<int> x, val<int> y) {
+			return x * y;
+		}
+
 		//Tests that a function can be passed into another function
 		TEST_METHOD(HigherOrderFunctionTest)
 		{
@@ -137,6 +142,21 @@ namespace FunctionalCppTests
 		TEST_METHOD(ForEachOverList)
 		{
 			Assert::Fail();
+		}
+
+		//Function Composition Test: f . g = f(g(x))
+		TEST_METHOD(SimpleFunctionCompositionTest)
+		{
+			auto F = Functional::GetContext();
+			Func<val<int>(val<int>)> myFunc = [](val<int> x) { return x + 1; };
+			Func<val<int>(val<int>)> myOtherFunc = [](val<int> x) { return x * 2; };
+
+			Func<val<int>(val<int>)> composedFunction = F->compose<val<int>>(myOtherFunc, myFunc);
+
+			val<int> expected = (2)*(1 + 1);
+			val<int> result = composedFunction(1);
+
+			Assert::AreEqual(expected, result);
 		}
 	};
 }

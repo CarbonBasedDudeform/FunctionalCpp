@@ -123,6 +123,13 @@ namespace FunctionalCPP {
 			return local();
 		}
 
+		template<typename T>
+		const Func<T(T)> compose(Func<T(T)> f, Func<T(T)> g)
+		{
+			auto composedFunc = [=](T arg) { return f(g(arg)); };
+			return composedFunc;
+		}
+
 	private:
 		static std::shared_ptr<Functional> _pureContext;
 	};

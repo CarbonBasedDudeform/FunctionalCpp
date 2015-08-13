@@ -118,6 +118,23 @@ namespace FunctionalCPP {
 		return composedFunc;
 	}
 
+	template<typename T>
+	static List<T> filter(const List<T> collection, Func<bool(T)> predicate)
+	{
+		List<T> copy;
+
+		const size_t size = collection.size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			if (predicate(collection.get(i)))
+			{
+				copy.insert(collection.get(i));
+			}
+		}
+
+		return copy;
+	}
+
 	class Functional {
 	public :
 		static std::shared_ptr<Functional> GetContext() {

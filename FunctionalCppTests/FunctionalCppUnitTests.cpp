@@ -97,9 +97,32 @@ namespace FunctionalCppTests
 
 		TEST_METHOD(FilterSequentualList1to10into1to5)
 		{
-			auto fpContext = Functional::GetContext();
+			List<int> myList{ 1,2,3,4,5,6,7,8,9,10 };
 
-			Assert::Fail();
+			auto lessThanFive = filter<int>(myList, [](int val) { return val < 5; });
+
+			size_t expectedSize = 4;
+			Assert::AreEqual(expectedSize, lessThanFive.size());
+			for (int index = 0; index < (int)expectedSize; index++)
+			{
+				Assert::AreEqual(lessThanFive.get(index), index+1);
+			}
+		}
+
+		TEST_METHOD(FilterSequentialList1to10toOddNumbers)
+		{
+			List<int> myList{ 1,2,3,4,5,6,7,8,9,10 };
+			List<int> oddnums{ 1, 3, 5, 7, 9 };
+			auto odds = filter<int>(myList, [](int val) {
+				return val % 2 != 0;
+			});
+
+			size_t expectedSizeOfOdds = oddnums.size();
+			Assert::AreEqual(expectedSizeOfOdds, odds.size());
+			for (int index = 0; index < (int)expectedSizeOfOdds; index++)
+			{
+				Assert::AreEqual(oddnums.get(index), odds.get(index));
+			}
 		}
 
 		//vs2015 no longer allows collections of type const, so testing hand-rolled const linked list

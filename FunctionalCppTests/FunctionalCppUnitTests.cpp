@@ -49,8 +49,7 @@ namespace FunctionalCppTests
 		TEST_METHOD(MapValueOnToCollection)
 		{
 			List<val<int>> myInts{ 1, 2, 3, 4, 5 };
-			Functional F;
-			auto newInts = F.map<val<int>>(myInts, [](val<int> x){ return x*x; });
+			auto newInts = map<val<int>>(myInts, [](val<int> x){ return x*x; });
 
 			List<int> expectedInts{ 1, 4, 9, 16, 25 };
 
@@ -147,16 +146,33 @@ namespace FunctionalCppTests
 		//Function Composition Test: f . g = f(g(x))
 		TEST_METHOD(SimpleFunctionCompositionTest)
 		{
-			auto F = Functional::GetContext();
 			Func<val<int>(val<int>)> myFunc = [](val<int> x) { return x + 1; };
 			Func<val<int>(val<int>)> myOtherFunc = [](val<int> x) { return x * 2; };
 
-			Func<val<int>(val<int>)> composedFunction = F->compose<val<int>>(myOtherFunc, myFunc);
+			Func<val<int>(val<int>)> composedFunction = compose<val<int>>(myOtherFunc, myFunc);
 
 			val<int> expected = (2)*(1 + 1);
 			val<int> result = composedFunction(1);
 
 			Assert::AreEqual(expected, result);
+		}
+
+		//takes the add method and curries it to create + 1 function
+		TEST_METHOD(SimpleCurryFunction)
+		{
+			
+			Func < val<int>(val<int>) > curriedAdd = curry<val<int>>(add, 1);
+
+			val<int> expected = 1 + 1;
+			val<int> result = curriedAdd(1);
+
+			Assert::AreEqual(expected, result);
+
+			auto secondCurriedAdd = curry<val<int>>(add, 2);
+			val<int> expected2 = 4 + 2;
+			val<int> result2 = secondCurriedAdd(4);
+
+			Assert::AreEqual(expected2, result2);
 		}
 	};
 }

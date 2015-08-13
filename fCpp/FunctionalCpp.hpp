@@ -93,6 +93,31 @@ namespace FunctionalCPP {
 	template<typename T>
 	using Func = std::function < T > ;
 
+	template<typename T>
+	static Func<T(T)> curry(Func<T(T, T)> someFunction, T someArg) {
+		return [=](T arg) { return someFunction(someArg, arg); };
+	}
+
+	template<typename T>
+	static List<T> map(const List<T> collection, const Func<T(T)> op) {
+		List<T> copy;
+
+		const size_t size = collection.size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			copy.insert(op(collection.get(i)));
+		}
+
+		return copy;
+	}
+
+	template<typename T>
+	static const Func<T(T)> compose(Func<T(T)> f, Func<T(T)> g)
+	{
+		auto composedFunc = [=](T arg) { return f(g(arg)); };
+		return composedFunc;
+	}
+
 	class Functional {
 	public :
 		static std::shared_ptr<Functional> GetContext() {
@@ -106,29 +131,10 @@ namespace FunctionalCPP {
 		Functional() {};
 
 		template<typename T>
-		List<T> map(const List<T> collection, const Func<T(T)> op) const {
-			List<T> copy;
-
-			const size_t size = collection.size();
-			for (size_t i = 0; i < size; ++i)
-			{
-				copy.insert(op(collection.get(i)));
-			}
-
-			return copy;
-		}
-
-		template<typename T>
 		const T pure(Func<const T()> const local) const {
 			return local();
 		}
 
-		template<typename T>
-		const Func<T(T)> compose(Func<T(T)> f, Func<T(T)> g)
-		{
-			auto composedFunc = [=](T arg) { return f(g(arg)); };
-			return composedFunc;
-		}
 
 	private:
 		static std::shared_ptr<Functional> _pureContext;

@@ -25,7 +25,7 @@ namespace FunctionalCppTests
 		}
 
 		//Tests that a function can be passed into another function
-		TEST_METHOD(HigherOrderFunctionTest)
+		TEST_METHOD(HigherOrderFunction)
 		{
 			Func<val<int>(val<int>, val<int>)> localAdd = add;
 			auto expected = add(1, 1);
@@ -35,7 +35,7 @@ namespace FunctionalCppTests
 		}
 
 		//Lambdas can be passed into another function
-		TEST_METHOD(LambdasHigherOrderFunctionTest)
+		TEST_METHOD(LambdasHigherOrderFunction)
 		{
 			Func<val<int>(val<int>, val<int>)> myAdd = [](val<int> x, val<int> y) { return x + y;  };
 			auto expected = 1 + 1;
@@ -160,14 +160,9 @@ namespace FunctionalCppTests
 				Assert::AreEqual( newInts.get(index), myInts.get(index) );
 			}
 		}
-		//ForEach over a List
-		TEST_METHOD(ForEachOverList)
-		{
-			Assert::Fail();
-		}
 
 		//Function Composition Test: f . g = f(g(x))
-		TEST_METHOD(SimpleFunctionCompositionTest)
+		TEST_METHOD(SimpleFunctionComposition)
 		{
 			Func<val<int>(val<int>)> myFunc = [](val<int> x) { return x + 1; };
 			Func<val<int>(val<int>)> myOtherFunc = [](val<int> x) { return x * 2; };

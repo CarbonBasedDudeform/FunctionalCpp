@@ -192,5 +192,43 @@ namespace FunctionalCppTests
 
 			Assert::AreEqual(expected2, result2);
 		}
+
+		//Generates a list of odd numbers [1,10] satisfying a simple predicate
+		TEST_METHOD(GenerateAListOfOddNumbersBetween1and10)
+		{
+			val<int> base = 1;
+			val<int> limit = 10;
+			List<int> oddNumbers = generate<int>(base, limit, [](int val){
+				return val % 2 == 0;
+			});
+
+			int size = oddNumbers.size();
+			for (int index = 0; index < size; index++)
+			{
+				Assert::IsTrue(oddNumbers.get(index) % 2 == 0);
+			}
+		}
+
+		//Generates a list of numbers 1.0, 1.1, 1.2...2.0 testing custom transformation between elements
+		TEST_METHOD(GenerateAListOfFloatsBetweenOneAndTwoWithATenthDifference)
+		{
+			val<float> base = 1;
+			val<float> limit = 2;
+			List<float> oddNumbers = generate<float>(base, limit,
+				[](float val) {
+				return true;
+			},
+				[](float val) {
+				return val + 0.1f;
+			});
+
+			int size = oddNumbers.size();
+			float myCounter = 1.0f;
+			for (int index = 0; index < size; index++)
+			{
+				Assert::AreEqual(oddNumbers.get(index), myCounter);
+				myCounter += 0.1f;
+			}
+		}
 	};
 }

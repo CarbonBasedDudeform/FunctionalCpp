@@ -135,6 +135,46 @@ namespace FunctionalCPP {
 		return copy;
 	}
 
+	template<typename T>
+	static List<T> generate(T base, T limit, Func<bool(T)> predicate)
+	{
+		List<T> list;
+
+		T current = base;
+
+		while (current != limit)
+		{
+			if (predicate(current))
+			{
+				list.insert(current);
+			}
+
+			current++;
+		}
+
+		return list;
+	}
+
+	template<typename T>
+	static List<T> generate(T base, T limit, Func<bool(T)> predicate, Func<T(T)> transform)
+	{
+		List<T> list;
+
+		T current = base;
+
+		while (current <= limit)
+		{
+			if (predicate(current))
+			{
+				list.insert(current);
+			}
+
+			current = transform(current);
+		}
+
+		return list;
+	}
+
 	class Functional {
 	public :
 		static std::shared_ptr<Functional> GetContext() {

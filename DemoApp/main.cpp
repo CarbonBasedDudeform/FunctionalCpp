@@ -10,7 +10,7 @@ using namespace FunctionalCPP;
 int main()
 {
 	cout << "Demo App for functional C++" << endl;
-	/*
+	
 	val<int> two = Functional::GetContext()->pure<val<int>>([](){
 		return 1 + 1;
 	});
@@ -30,8 +30,39 @@ int main()
 	//ignores the constness of types when outputting.
 	cout << typeid(res).name() << endl;
 
-	List<float> myFloats = { 1.0f, 2.0f, 3.0f };
-	*/
+	List<float> myFloats = { 1.0f, 2.0f, 3.0f }; //defining a list via list initialisation
+
+	std::cout << "==================" << std::endl;
+	std::cout << "list comphrension" << std::endl;
+	std::cout << "=================" << std::endl;
+	List<float> numbers = generate<float>(0.0f, 1.0f, [](float val) {return true;}, 
+													  [](float val) { return val + 0.1f;},
+													  [](float val, float otherVal) { return (otherVal - val) < -0.1;});
+
+	//using the map function as foreach...
+	map<float>(numbers, [](float val) {
+		std::cout << val << std::endl; //...yeah, not exactly pure functional programming
+		return val;
+	});
+
+	std::cout << "=================================" << std::endl;
+	std::cout << "list comphrension and composition" << std::endl;
+	std::cout << "=================================" << std::endl;
+	//using composition to define a list
+	Func<bool(val<int>)> oddNumbers = [](val<int> val) { return (val % 2) != 0;};
+	Func<val<int>(val<int>)> GreaterThanFive = [](val<int> val) { if (val > 5) return val; else return 0; };
+	Func<val<int>(val<int>)> GreaterThanTen = [](val<int> val) { if (val > 10) return val; else return 0; };
+
+	auto first = compose<val<int>,val<int>, val<int>>(GreaterThanTen, GreaterThanFive);
+	auto second = compose<bool,val<int>, val<int>>(oddNumbers, first);
+	List<int> oddsNsodds = generate<int>(0, 20, second);
+
+	//using the map function as foreach...
+	map<int>(oddsNsodds, [](int val) {
+		std::cout << val << std::endl; //...yeah, still not exactly pure functional programming
+		return val;
+	});
+
 	cin.get();
 	return 0;
 }

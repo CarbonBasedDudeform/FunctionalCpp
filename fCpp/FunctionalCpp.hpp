@@ -111,10 +111,10 @@ namespace FunctionalCPP {
 		return copy;
 	}
 
-	template<typename T>
-	static const Func<T(T)> compose(Func<T(T)> f, Func<T(T)> g)
+	template<typename A, typename B, typename C>
+	static const Func<A(C)> compose(Func<A(B)> f, Func<B(C)> g)
 	{
-		auto composedFunc = [=](T arg) { return f(g(arg)); };
+		auto composedFunc = [=](C arg) { return f(g(arg)); };
 		return composedFunc;
 	}
 
@@ -161,8 +161,26 @@ namespace FunctionalCPP {
 		List<T> list;
 
 		T current = base;
+		do
+		{
+			if (predicate(current))
+			{
+				list.insert(current);
+			}
 
-		while (current <= limit)
+			current = transform(current);
+		} while (current != limit);
+
+		return list;
+	}
+
+	template<typename T>
+	static List<T> generate(T base, T limit, Func<bool(T)> predicate, Func<T(T)> transform, Func<bool(T, T)> equality)
+	{
+		List<T> list;
+
+		T current = base;
+		while(equality(current, limit) == false)
 		{
 			if (predicate(current))
 			{

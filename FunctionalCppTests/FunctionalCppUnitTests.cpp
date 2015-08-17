@@ -167,7 +167,7 @@ namespace FunctionalCppTests
 			Func<val<int>(val<int>)> myFunc = [](val<int> x) { return x + 1; };
 			Func<val<int>(val<int>)> myOtherFunc = [](val<int> x) { return x * 2; };
 
-			Func<val<int>(val<int>)> composedFunction = compose<val<int>>(myOtherFunc, myFunc);
+			Func<val<int>(val<int>)> composedFunction = compose<val<int>, val<int>, val<int>>(myOtherFunc, myFunc);
 
 			val<int> expected = (2)*(1 + 1);
 			val<int> result = composedFunction(1);
@@ -220,6 +220,8 @@ namespace FunctionalCppTests
 			},
 				[](float val) {
 				return val + 0.1f;
+			}, [](float val, float otherVal) {
+				return abs(val - otherVal) < 0.001;
 			});
 
 			int size = oddNumbers.size();

@@ -10,3 +10,5 @@ In some sense it is just a wrapper for the functional stl library
 http://en.cppreference.com/w/cpp/header/functional
 
 Inspired from a talk on functional programming I attended and the idea of using function pointers to create higher-order functions in C\C++.
+
+More here: http://dominicmusgrave.co.uk/blog/functional-programming-in-c/
